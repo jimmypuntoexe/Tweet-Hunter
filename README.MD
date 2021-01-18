@@ -17,9 +17,9 @@ Project A: Personalized Search Engine for microblog
 * put folders models and repository in RetrivalProject directory
 * extract the zip folder
 * `cd RetrivalProject`
-* `python3 -m venv RetrivalProject`  to create environment
+* install requirements `pip install -r requirements.txt
 * activate environment with `source bin/activate`
-* install requirements `pip install -r requirements.txt`
+`
 
 
 
