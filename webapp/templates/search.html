@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <title>Hunter</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#profile option").filter(function () {
+        return $(this).val() == "{{ user }}";
+      }).prop('selected', true);
+      $("#topic option").filter(function () {
+        return $(this).val() == "{{ topic }}";
+      }).prop('selected', true);
+      $("#method option").filter(function () {
+        return $(this).val() == "{{ method }}";
+      }).prop('selected', true);
+    });
+    function ImgError(source) {
+      source.src = "/static/user.png";
+      source.onerror = "";
+      return true;
+    }
+  </script>
+
+  </head>
+  <body style="background-color: #eeeeee">
+<div class="w-75 p-3 mx-auto" style="background-image: linear-gradient(to bottom, #eeeeee ,#D8F0F3  ) !important;">
+    <p class="h1" style="color:#17a2b8 ;">Hunter</p>
+    <p class="h5" style="color:#17a2b8 ;">Personalized Search Engine for microblog</p>
+
+<form id="search-bar" action="/search">
+  <div class="row mb-3">
+    <div class="form-group col-md-12">
+      <input class="form-control" type="text" placeholder="query" name="search" value="{{ query }}" required>
+    </div>
+  </div>
+  <div class="row mb-3">
+
+    <div class="form-group col-md-4">
+      <label for="profile">Profile</label>
+      <select id="profile" class="form-control" name="profile">
+        <option value="None" selected>None</option>
+        <option value="BryanCranston">Bryan Cranston</option>
+        <option value="CharlizeAfrica">Charlize Theron</option>
+        <option value="elonmusk">Elon Musk</option>
+        <option value="KingJames">Lebron James</option>
+        <option value="SamuelLJackson">Samuel L. Jackson</option>
+        <option value="springsteen">Bruce Springsteen</option>
+        <option value="TechCrunch">Tech Crunch</option>
+        <option value="WayneRooney">Wayne Rooney</option>
+        <option value="kendricklamar">Kendrick Lamar</option>
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="topic">Topic</label>
+      <select id="topic" class="form-control" name="topic">
+        <option value="None" selected>None</option>
+        <option value="sport">sport</option>
+        <option value="music">music</option>
+        <option value="cinema">cinema</option>
+        <option value="technology">technology</option>
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="field">Select a Field</label>
+      <select id="field" class="form-control" name="field" required>
+        <option value="text" selected>text</option>
+        <option value="hashtag">hashtag</option>
+        <option value="username">user name</option>
+      </select>
+    </div>
+  </div>
+  <div class="row mb-3">
+   
+  </div>
+  <div class="row mb-3">
+    <div class="form-group col-md-3">
+      <button class="btn btn-primary"  type="submit">Search</button>
+    </div>
+  </div>
+</form>
+<div class="row mb-3">
+  <div class="col-md-12">
+    {% if should %}
+    <p><b>User Profle terms: {{ should }} </b></p>
+    {% endif %}
+  </div>
+</div>
+<div>
+  {% if tweets|length > 0 %}
+  {% for tweet in tweets%}
+  <div class="row mb-3">
+    <div class="col-md-2">
+      <img width="48" height="48" class="rounded-circle" src="{{tweet._source.profile_image_url}}"
+        onerror="ImgError(this)"><br>
+      <p3 class="overflow-wrap: break-word">{{tweet._source.user_name}}</p3>
+    </div>
+    <div class="col-md-1">
+
+    <ul class="nav nav-tabs">
+  <li class="dropdown">
+
+    <a class="dropdown-toggle"
+       data-toggle="dropdown"
+       href="#">
+        Hashtags
+        <b class="caret"></b>
+      </a>
+         
+    <ul class="dropdown-menu">
+    {% for hashtag in tweet._source.hashtags%}
+        #{{hashtag}}
+        {% endfor %}
+    </ul>
+   
+  
+  </li>
+</ul>
+
+    </div>
+    <div class="col-md-8">
+      <p3>{{tweet._source.text}}</p3>
+      <br>
+      <p3>Retweets: {{tweet._source.retweet}}</p3>
+      <p3 style="margin-left: 1%">Likes: {{tweet._source.like}}</p3>
+      <p3 style="margin-left: 1%">Created at: {{tweet._source.created_at}}</p3>
+      <br>
+      <p3>Topic: {{tweet._source.topic}}</p3>
+      <br>
+      <p3>RSV: {{tweet._score}}</p3>
+      <br>
+      <a href="{{tweet._source.tweet_url}}">Link</a>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
+   
+  </div>
+  </body>
+</html>
