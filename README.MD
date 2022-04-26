@@ -24,7 +24,7 @@ Project A: Personalized Search Engine for microblog
 
 
 ## Usage
-
+* linux kibana start`sudo sysctl -w vm.max_map_count=262144`
 * start services `docker-compose up -d`
 * create index `python index/indexing.py`
 * run the web app `python webapp/app.py`
